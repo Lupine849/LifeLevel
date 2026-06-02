@@ -16,3 +16,21 @@ body {
   color: #ffffff;
   min-height: 100vh;
 }
+
+/* ヘッダー */
+
+header {
+  text-align: center;
+  padding: 40px 20px 20px;
+}
+
+h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.level {
+  font-size: 2rem;
+  color: #4ade80;
+  font-weight: bold;
+}
