@@ -72,3 +72,31 @@ button {
 button:hover {
   opacity: 0.9;
 }
+
+/* EXPステータス */
+
+.exp-status {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.exp-text {
+  margin-bottom: 12px;
+  font-weight: bold;
+}
+
+.exp-bar {
+  width: 100%;
+  height: 20px;
+  background-color: #333;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.exp-fill {
+  width: 0%;
+  height: 100%;
+  background-color: #4ade80;
+  transition: width 0.3s;
+}
