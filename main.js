@@ -11,4 +11,11 @@ taskForm.addEventListener('submit', (e) => {
   if (task === '') {
     return;
   }
+
+  const li = document.createElement('li');
+  li.textContent = task;
+
+  const taskList = document.querySelector('.task-list');
+
+  taskList.appendChild(li);
 });
