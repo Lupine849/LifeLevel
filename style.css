@@ -73,6 +73,21 @@ button:hover {
   opacity: 0.9;
 }
 
+/* タスクリスト */
+
+.task-list {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.task-list li {
+  background-color: #1e1e1e;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
 /* EXPステータス */
 
 .exp-status {
