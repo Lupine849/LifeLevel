@@ -13,7 +13,15 @@ taskForm.addEventListener('submit', (e) => {
   }
 
   const li = document.createElement('li');
-  li.textContent = task;
+
+  const checkbox = document.createElement('input');
+  checkbox.type = 'checkbox';
+
+  const span = document.createElement('span');
+  span.textContent = task;
+
+  li.appendChild(checkbox);
+  li.appendChild(span);
 
   const taskList = document.querySelector('.task-list');
 
