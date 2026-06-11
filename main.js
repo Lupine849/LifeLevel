@@ -20,6 +20,10 @@ taskForm.addEventListener('submit', (e) => {
   const span = document.createElement('span');
   span.textContent = task;
 
+  checkbox.addEventListener('change', () => {
+    span.classList.toggle('completed');
+  });
+
   li.appendChild(checkbox);
   li.appendChild(span);
 

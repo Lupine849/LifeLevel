@@ -98,6 +98,11 @@ button:hover {
   top: 1px;
 }
 
+.completed {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
 /* EXPステータス */
 
 .exp-status {
