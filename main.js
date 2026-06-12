@@ -2,6 +2,7 @@
 
 const taskForm = document.querySelector('#task-form');
 const taskInput = document.querySelector('#task-input');
+const taskList = document.querySelector('.task-list');
 
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -35,7 +36,8 @@ taskForm.addEventListener('submit', (e) => {
   li.appendChild(span);
   li.appendChild(button);
 
-  const taskList = document.querySelector('.task-list');
-
   taskList.appendChild(li);
+
+  taskInput.value = '';
+  taskInput.focus();
 });
