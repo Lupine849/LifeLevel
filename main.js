@@ -24,8 +24,16 @@ taskForm.addEventListener('submit', (e) => {
     span.classList.toggle('completed');
   });
 
+  const button = document.createElement('button');
+  button.textContent = '✕';
+
+  button.addEventListener('click', () => {
+    li.remove();
+  });
+
   li.appendChild(checkbox);
   li.appendChild(span);
+  li.appendChild(button);
 
   const taskList = document.querySelector('.task-list');
 
