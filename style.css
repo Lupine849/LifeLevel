@@ -59,6 +59,20 @@ form {
   font-size: 1rem;
 }
 
+#exp-input::-webkit-outer-spin-button,
+#exp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#exp-input {
+  appearance: textfield;
+  padding: 6px;
+  border: none;
+  border-radius: 10px;
+  text-align: center;
+}
+
 form button {
   padding: 12px 20px;
   border: none;
