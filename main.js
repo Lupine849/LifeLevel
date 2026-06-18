@@ -29,6 +29,7 @@ taskForm.addEventListener('submit', (e) => {
 
   const expSpan = document.createElement('span');
   expSpan.textContent = `${exp}EXP`;
+  expSpan.classList.add('task-exp');
 
   const button = document.createElement('button');
   button.textContent = '✕';

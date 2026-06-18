@@ -117,6 +117,10 @@ form button:hover {
   opacity: 0.7;
 }
 
+.task-exp {
+  margin-left: auto;
+}
+
 .task-list li button {
   margin-left: auto;
   width: 32px;
