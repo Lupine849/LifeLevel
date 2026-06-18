@@ -3,13 +3,15 @@
 const taskForm = document.querySelector('#task-form');
 const taskInput = document.querySelector('#task-input');
 const taskList = document.querySelector('.task-list');
+const expInput = document.querySelector('#exp-input');
 
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   const task = taskInput.value.trim();
+  const exp = Number(expInput.value);
 
-  if (task === '') {
+  if (task === '' || exp < 1 || exp > 100) {
     return;
   }
 
@@ -18,12 +20,15 @@ taskForm.addEventListener('submit', (e) => {
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
 
-  const span = document.createElement('span');
-  span.textContent = task;
+  const taskSpan = document.createElement('span');
+  taskSpan.textContent = task;
 
   checkbox.addEventListener('change', () => {
-    span.classList.toggle('completed');
+    taskSpan.classList.toggle('completed');
   });
+
+  const expSpan = document.createElement('span');
+  expSpan.textContent = `${exp}EXP`;
 
   const button = document.createElement('button');
   button.textContent = '✕';
@@ -33,11 +38,13 @@ taskForm.addEventListener('submit', (e) => {
   });
 
   li.appendChild(checkbox);
-  li.appendChild(span);
+  li.appendChild(taskSpan);
+  li.appendChild(expSpan);
   li.appendChild(button);
 
   taskList.appendChild(li);
 
   taskInput.value = '';
+  expInput.value = '';
   taskInput.focus();
 });
