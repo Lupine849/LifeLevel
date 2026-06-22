@@ -4,6 +4,9 @@ const taskForm = document.querySelector('#task-form');
 const taskInput = document.querySelector('#task-input');
 const taskList = document.querySelector('.task-list');
 const expInput = document.querySelector('#exp-input');
+const expText = document.querySelector('.exp-text');
+
+let currentExp = 0;
 
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -25,6 +28,11 @@ taskForm.addEventListener('submit', (e) => {
 
   checkbox.addEventListener('change', () => {
     taskSpan.classList.toggle('completed');
+
+    if (checkbox.checked) {
+      currentExp += exp;
+      expText.textContent = `EXP ${currentExp} / 100`;
+    }
   });
 
   const expSpan = document.createElement('span');
