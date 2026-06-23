@@ -5,6 +5,7 @@ const taskInput = document.querySelector('#task-input');
 const taskList = document.querySelector('.task-list');
 const expInput = document.querySelector('#exp-input');
 const expText = document.querySelector('.exp-text');
+const expFill = document.querySelector('.exp-fill');
 
 let currentExp = 0;
 
@@ -32,6 +33,10 @@ taskForm.addEventListener('submit', (e) => {
     if (checkbox.checked) {
       currentExp += exp;
       expText.textContent = `EXP ${currentExp} / 100`;
+
+      const percentage = currentExp;
+
+      expFill.style.width = `${percentage}%`;
     }
   });
 
