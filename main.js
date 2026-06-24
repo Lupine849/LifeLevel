@@ -6,8 +6,10 @@ const taskList = document.querySelector('.task-list');
 const expInput = document.querySelector('#exp-input');
 const expText = document.querySelector('.exp-text');
 const expFill = document.querySelector('.exp-fill');
+const level = document.querySelector('.level');
 
 let currentExp = 0;
+let currentLevel = 1;
 
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -37,6 +39,19 @@ taskForm.addEventListener('submit', (e) => {
       const percentage = currentExp;
 
       expFill.style.width = `${percentage}%`;
+
+      if (currentExp >= 100) {
+        currentLevel++;
+
+        currentExp -= 100;
+
+        level.textContent = `Lv.${currentLevel}`;
+        expText.textContent = `EXP ${currentExp} / 100`;
+
+        const percentage = currentExp;
+
+        expFill.style.width = `${percentage}%`;
+      }
     }
   });
 
