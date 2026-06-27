@@ -10,6 +10,9 @@ const level = document.querySelector('.level');
 
 let currentExp = 0;
 let currentLevel = 1;
+let requiredExp = 100 + (currentLevel * currentLevel * 10);
+
+expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
 
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -34,25 +37,24 @@ taskForm.addEventListener('submit', (e) => {
 
     if (checkbox.checked) {
       currentExp += exp;
-      expText.textContent = `EXP ${currentExp} / 100`;
+      expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
 
-      const percentage = currentExp;
-
-      expFill.style.width = `${percentage}%`;
-
-      if (currentExp >= 100) {
+      if (currentExp >= requiredExp) {
         currentLevel++;
 
-        currentExp -= 100;
+        currentExp -= requiredExp;
 
         level.textContent = `Lv.${currentLevel}`;
-        expText.textContent = `EXP ${currentExp} / 100`;
 
-        const percentage = currentExp;
+        requiredExp = 100 + (currentLevel * currentLevel * 10);
 
-        expFill.style.width = `${percentage}%`;
+        expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
       }
     }
+
+    const percentage = (currentExp / requiredExp) * 100;
+
+    expFill.style.width = `${percentage}%`;
   });
 
   const expSpan = document.createElement('span');
