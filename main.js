@@ -115,6 +115,15 @@ taskForm.addEventListener('submit', (e) => {
     return;
   }
 
+  const totalExp = tasks.reduce((sum, task) => {
+    return sum + task.exp;
+  }, 0);
+
+  if (totalExp + exp > 100) {
+    alert('タスクの合計EXPは100までです。');
+    return;
+  }
+
   const newTask = {
     task: task,
     exp: exp,
