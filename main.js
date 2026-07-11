@@ -21,6 +21,12 @@ level.textContent = `Lv.${currentLevel}`;
 expFill.style.width = `${percentage}%`;
 
 function createTask(task) {
+  const today = new Date().toLocaleDateString('sv-SE');
+
+  if (task.lastClaimDate !== today) {
+    task.completed = false;
+  }
+
   const li = document.createElement('li');
 
   const checkbox = document.createElement('input');
@@ -37,20 +43,16 @@ function createTask(task) {
   checkbox.addEventListener('change', () => {
     const today = new Date().toLocaleDateString('sv-SE');
 
-    taskSpan.classList.toggle('completed');
-
     task.completed = checkbox.checked;
 
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    taskSpan.classList.toggle('completed', task.completed);
 
-    if (task.lastClaimDate !== today) {
+    if (checkbox.checked && task.lastClaimDate !== today) {
       currentExp += task.exp;
 
       localStorage.setItem('currentExp', currentExp);
 
       task.lastClaimDate = today;
-
-      localStorage.setItem('tasks', JSON.stringify(tasks));
 
       expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
 
@@ -70,6 +72,8 @@ function createTask(task) {
         expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
       }
     }
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 
     const percentage = (currentExp / requiredExp) * 100;
 
@@ -105,13 +109,15 @@ tasks.forEach((task) => {
   createTask(task);
 });
 
+localStorage.setItem('tasks', JSON.stringify(tasks));
+
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
-  const task = taskInput.value.trim();
+  const taskName = taskInput.value.trim();
   const exp = Number(expInput.value);
 
-  if (task === '' || exp < 1 || exp > 100) {
+  if (taskName === '' || exp < 1 || exp > 100) {
     return;
   }
 
@@ -125,7 +131,7 @@ taskForm.addEventListener('submit', (e) => {
   }
 
   const newTask = {
-    task: task,
+    task: taskName,
     exp: exp,
     completed: false,
     lastClaimDate: null
