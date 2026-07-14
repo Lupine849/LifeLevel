@@ -13,6 +13,8 @@ const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 let currentExp = Number(localStorage.getItem('currentExp')) || 0;
 let currentLevel = Number(localStorage.getItem('currentLevel')) || 1;
 let requiredExp = 100 + (currentLevel * currentLevel * 10);
+let dailyExp = Number(localStorage.getItem('dailyExp')) || 0;
+let dailyExpDate = localStorage.getItem('dailyExpDate');
 
 const percentage = (currentExp / requiredExp) * 100;
 
@@ -25,6 +27,14 @@ function createTask(task) {
 
   if (task.lastClaimDate !== today) {
     task.completed = false;
+  }
+
+  if (dailyExpDate !== today) {
+    dailyExp = 0;
+    dailyExpDate = today;
+
+    localStorage.setItem('dailyExp', dailyExp);
+    localStorage.setItem('dailyExpDate', dailyExpDate);
   }
 
   const li = document.createElement('li');
@@ -43,12 +53,33 @@ function createTask(task) {
   checkbox.addEventListener('change', () => {
     const today = new Date().toLocaleDateString('sv-SE');
 
+    if (dailyExpDate !== today) {
+      dailyExp = 0;
+      dailyExpDate = today;
+
+      localStorage.setItem('dailyExpDate', dailyExpDate);
+    }
+
+    if (
+      checkbox.checked &&
+      task.lastClaimDate !== today &&
+      dailyExp + task.exp > 100
+    ) {
+      alert('1日に獲得できるEXPは100までです。');
+
+      checkbox.checked = false;
+    }
+
     task.completed = checkbox.checked;
 
     taskSpan.classList.toggle('completed', task.completed);
 
-    if (checkbox.checked && task.lastClaimDate !== today) {
+    if (
+      checkbox.checked &&
+      task.lastClaimDate !== today
+    ) {
       currentExp += task.exp;
+      dailyExp += task.exp;
 
       localStorage.setItem('currentExp', currentExp);
 
@@ -74,6 +105,7 @@ function createTask(task) {
     }
 
     localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('dailyExp', dailyExp);
 
     const percentage = (currentExp / requiredExp) * 100;
 
@@ -118,15 +150,6 @@ taskForm.addEventListener('submit', (e) => {
   const exp = Number(expInput.value);
 
   if (taskName === '' || exp < 1 || exp > 100) {
-    return;
-  }
-
-  const totalExp = tasks.reduce((sum, task) => {
-    return sum + task.exp;
-  }, 0);
-
-  if (totalExp + exp > 100) {
-    alert('タスクの合計EXPは100までです。');
     return;
   }
 
