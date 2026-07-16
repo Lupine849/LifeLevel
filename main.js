@@ -9,6 +9,8 @@ const expFill = document.querySelector('.exp-fill');
 const level = document.querySelector('.level');
 
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const dailyExpLimit = 100;
+const dailyBonusExp = 20;
 
 let currentExp = Number(localStorage.getItem('currentExp')) || 0;
 let currentLevel = Number(localStorage.getItem('currentLevel')) || 1;
@@ -63,9 +65,9 @@ function createTask(task) {
     if (
       checkbox.checked &&
       task.lastClaimDate !== today &&
-      dailyExp + task.exp > 100
+      dailyExp + task.exp > dailyExpLimit
     ) {
-      alert('1日に獲得できるEXPは100までです。');
+      alert(`1日に獲得できるEXPは${dailyExpLimit}までです。`);
 
       checkbox.checked = false;
     }
@@ -80,6 +82,10 @@ function createTask(task) {
     ) {
       currentExp += task.exp;
       dailyExp += task.exp;
+
+      if (dailyExp === dailyExpLimit) {
+        currentExp += dailyBonusExp;
+      }
 
       localStorage.setItem('currentExp', currentExp);
 
