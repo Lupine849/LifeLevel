@@ -7,6 +7,7 @@ const expInput = document.querySelector('#exp-input');
 const expText = document.querySelector('.exp-text');
 const expFill = document.querySelector('.exp-fill');
 const level = document.querySelector('.level');
+const dailyExpText = document.querySelector('.daily-exp-text');
 
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 const dailyExpLimit = 100;
@@ -23,20 +24,31 @@ const percentage = (currentExp / requiredExp) * 100;
 expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
 level.textContent = `Lv.${currentLevel}`;
 expFill.style.width = `${percentage}%`;
+dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
 
-function createTask(task) {
-  const today = new Date().toLocaleDateString('sv-SE');
+function getToday() {
+  return new Date().toLocaleDateString('sv-SE');
+}
 
-  if (task.lastClaimDate !== today) {
-    task.completed = false;
-  }
-
+function resetDailyExp(today) {
   if (dailyExpDate !== today) {
     dailyExp = 0;
     dailyExpDate = today;
 
     localStorage.setItem('dailyExp', dailyExp);
     localStorage.setItem('dailyExpDate', dailyExpDate);
+
+    dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
+  }
+}
+
+resetDailyExp(getToday());
+
+function createTask(task) {
+  const today = getToday();
+
+  if (task.lastClaimDate !== today) {
+    task.completed = false;
   }
 
   const li = document.createElement('li');
@@ -53,14 +65,9 @@ function createTask(task) {
   }
 
   checkbox.addEventListener('change', () => {
-    const today = new Date().toLocaleDateString('sv-SE');
+    const today = getToday();
 
-    if (dailyExpDate !== today) {
-      dailyExp = 0;
-      dailyExpDate = today;
-
-      localStorage.setItem('dailyExpDate', dailyExpDate);
-    }
+    resetDailyExp(today);
 
     if (
       checkbox.checked &&
@@ -85,6 +92,8 @@ function createTask(task) {
 
       if (dailyExp === dailyExpLimit) {
         currentExp += dailyBonusExp;
+
+        alert(`${dailyExpLimit}EXP達成！ボーナス${dailyBonusExp}EXPを獲得しました。`);
       }
 
       localStorage.setItem('currentExp', currentExp);
@@ -92,6 +101,7 @@ function createTask(task) {
       task.lastClaimDate = today;
 
       expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
+      dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
 
       if (currentExp >= requiredExp) {
         currentLevel++;

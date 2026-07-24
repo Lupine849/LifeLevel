@@ -160,3 +160,8 @@ form button:hover {
   background-color: #4ade80;
   transition: width 0.3s;
 }
+
+.daily-exp-text {
+  margin-top: 24px;
+  font-weight: bold;
+}
