@@ -8,6 +8,7 @@ const expText = document.querySelector('.exp-text');
 const expFill = document.querySelector('.exp-fill');
 const level = document.querySelector('.level');
 const dailyExpText = document.querySelector('.daily-exp-text');
+const achievementRate = document.querySelector('.achievement-rate');
 
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 const dailyExpLimit = 100;
@@ -18,6 +19,8 @@ let currentLevel = Number(localStorage.getItem('currentLevel')) || 1;
 let requiredExp = 100 + (currentLevel * currentLevel * 10);
 let dailyExp = Number(localStorage.getItem('dailyExp')) || 0;
 let dailyExpDate = localStorage.getItem('dailyExpDate');
+let totalExp = Number(localStorage.getItem('totalExp')) || 0;
+let trackingStartDate = localStorage.getItem('trackingStartDate');
 
 const percentage = (currentExp / requiredExp) * 100;
 
@@ -39,10 +42,40 @@ function resetDailyExp(today) {
     localStorage.setItem('dailyExpDate', dailyExpDate);
 
     dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
+
+    return true;
   }
+
+  return false;
 }
 
 resetDailyExp(getToday());
+
+if (!trackingStartDate) {
+  trackingStartDate = getToday();
+
+  localStorage.setItem('trackingStartDate', trackingStartDate);
+}
+
+function calculateRecordDays(startDate, endDate) {
+  const start = new Date(`${startDate}T00:00:00`);
+  const end = new Date(`${endDate}T00:00:00`);
+
+  const difference = end - start;
+
+  return Math.floor(difference / (1000 * 60 * 60 * 24)) + 1;
+}
+
+function updateAchievementRate() {
+  const recordDays = calculateRecordDays(trackingStartDate, getToday()) - 1;
+  const completedTotalExp = totalExp - dailyExp;
+  const totalTargetExp = recordDays * dailyExpLimit;
+  const habitAchievementRate = totalTargetExp === 0 ? 0 : Math.floor((completedTotalExp / totalTargetExp) * 100);
+
+  achievementRate.textContent = `累計達成率 ${habitAchievementRate}%`;
+}
+
+updateAchievementRate();
 
 function createTask(task) {
   const today = getToday();
@@ -66,8 +99,12 @@ function createTask(task) {
 
   checkbox.addEventListener('change', () => {
     const today = getToday();
+    
+    const wasDailyExpReset = resetDailyExp(today);
 
-    resetDailyExp(today);
+    if (wasDailyExpReset) {
+      updateAchievementRate();
+    }
 
     if (
       checkbox.checked &&
@@ -89,6 +126,7 @@ function createTask(task) {
     ) {
       currentExp += task.exp;
       dailyExp += task.exp;
+      totalExp += task.exp;
 
       if (dailyExp === dailyExpLimit) {
         currentExp += dailyBonusExp;
@@ -97,6 +135,7 @@ function createTask(task) {
       }
 
       localStorage.setItem('currentExp', currentExp);
+      localStorage.setItem('totalExp', totalExp);
 
       task.lastClaimDate = today;
 
