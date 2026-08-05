@@ -161,20 +161,22 @@ form button:hover {
   transition: width 0.3s;
 }
 
-.daily-exp-text {
-  margin-top: 24px;
-  font-weight: bold;
-}
-
 /* 習慣ステータス */
 
 .habit-status {
-  background-color: #1e1e1e;
   margin-top: 30px;
+}
+
+.status-card {
+  background-color: #1e1e1e;
   padding: 20px;
   border-radius: 15px;
 }
 
-.achievement-rate {
+.status-card + .status-card {
+  margin-top: 15px;
+}
+
+.habit-status p {
   font-weight: bold;
 }
