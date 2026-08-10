@@ -9,6 +9,7 @@ const expFill = document.querySelector('.exp-fill');
 const level = document.querySelector('.level');
 const dailyExpText = document.querySelector('.daily-exp-text');
 const achievementRate = document.querySelector('.achievement-rate');
+const streakText = document.querySelector('.streak-text');
 
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 const dailyExpLimit = 100;
@@ -21,6 +22,7 @@ let dailyExp = Number(localStorage.getItem('dailyExp')) || 0;
 let dailyExpDate = localStorage.getItem('dailyExpDate');
 let totalExp = Number(localStorage.getItem('totalExp')) || 0;
 let trackingStartDate = localStorage.getItem('trackingStartDate');
+let streak = Number(localStorage.getItem('streak')) || 0;
 
 const percentage = (currentExp / requiredExp) * 100;
 
@@ -28,13 +30,36 @@ expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
 level.textContent = `Lv.${currentLevel}`;
 expFill.style.width = `${percentage}%`;
 dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
+streakText.textContent = `連続達成日数 ${streak}日`;
 
 function getToday() {
   return new Date().toLocaleDateString('sv-SE');
 }
 
+function getYesterday() {
+  const yesterday = new Date();
+
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  return yesterday.toLocaleDateString('sv-SE');
+}
+
+function updateStreak() {
+  if (dailyExp === dailyExpLimit && getYesterday() === dailyExpDate) {
+    streak++;
+  } else {
+    streak = 0;
+  }
+
+  localStorage.setItem('streak', streak);
+
+  streakText.textContent = `連続達成日数 ${streak}日`;
+}
+
 function resetDailyExp(today) {
   if (dailyExpDate !== today) {
+    updateStreak();
+
     dailyExp = 0;
     dailyExpDate = today;
 
@@ -99,7 +124,7 @@ function createTask(task) {
 
   checkbox.addEventListener('change', () => {
     const today = getToday();
-    
+
     const wasDailyExpReset = resetDailyExp(today);
 
     if (wasDailyExpReset) {
