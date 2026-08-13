@@ -121,6 +121,10 @@ form button:hover {
   margin-left: auto;
 }
 
+.task-achievementCount {
+  margin-left: auto;
+}
+
 .task-list li button {
   margin-left: auto;
   width: 32px;

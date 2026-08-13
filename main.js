@@ -115,12 +115,20 @@ function createTask(task) {
   checkbox.type = 'checkbox';
   checkbox.checked = task.completed;
 
-  const taskSpan = document.createElement('span');
-  taskSpan.textContent = task.task;
+  const taskName = document.createElement('span');
+  taskName.textContent = task.task;
 
   if (task.completed) {
-    taskSpan.classList.add('completed');
+    taskName.classList.add('completed');
   }
+
+  const exp = document.createElement('span');
+  exp.textContent = `${task.exp}EXP`;
+  exp.classList.add('task-exp');
+
+  const achievementCount = document.createElement('span');
+  achievementCount.textContent = `${task.achievementCount}回`;
+  achievementCount.classList.add('task-achievementCount');
 
   checkbox.addEventListener('change', () => {
     const today = getToday();
@@ -143,7 +151,7 @@ function createTask(task) {
 
     task.completed = checkbox.checked;
 
-    taskSpan.classList.toggle('completed', task.completed);
+    taskName.classList.toggle('completed', task.completed);
 
     if (
       checkbox.checked &&
@@ -152,6 +160,7 @@ function createTask(task) {
       currentExp += task.exp;
       dailyExp += task.exp;
       totalExp += task.exp;
+      task.achievementCount++;
 
       if (dailyExp === dailyExpLimit) {
         currentExp += dailyBonusExp;
@@ -159,22 +168,16 @@ function createTask(task) {
         alert(`${dailyExpLimit}EXP達成！ボーナス${dailyBonusExp}EXPを獲得しました。`);
       }
 
-      localStorage.setItem('currentExp', currentExp);
-      localStorage.setItem('totalExp', totalExp);
-
       task.lastClaimDate = today;
 
       expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
       dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
+      achievementCount.textContent = `${task.achievementCount}回`;
 
       if (currentExp >= requiredExp) {
         currentLevel++;
 
-        localStorage.setItem('currentLevel', currentLevel);
-
         currentExp -= requiredExp;
-
-        localStorage.setItem('currentExp', currentExp);
 
         level.textContent = `Lv.${currentLevel}`;
 
@@ -185,16 +188,15 @@ function createTask(task) {
     }
 
     localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('currentExp', currentExp);
+    localStorage.setItem('currentLevel', currentLevel);
     localStorage.setItem('dailyExp', dailyExp);
+    localStorage.setItem('totalExp', totalExp);
 
     const percentage = (currentExp / requiredExp) * 100;
 
     expFill.style.width = `${percentage}%`;
   });
-
-  const expSpan = document.createElement('span');
-  expSpan.textContent = `${task.exp}EXP`;
-  expSpan.classList.add('task-exp');
 
   const button = document.createElement('button');
   button.textContent = '✕';
@@ -210,8 +212,9 @@ function createTask(task) {
   });
 
   li.appendChild(checkbox);
-  li.appendChild(taskSpan);
-  li.appendChild(expSpan);
+  li.appendChild(taskName);
+  li.appendChild(exp);
+  li.appendChild(achievementCount);
   li.appendChild(button);
 
   taskList.appendChild(li);
@@ -237,7 +240,8 @@ taskForm.addEventListener('submit', (e) => {
     task: taskName,
     exp: exp,
     completed: false,
-    lastClaimDate: null
+    lastClaimDate: null,
+    achievementCount: 0,
   };
 
   tasks.push(newTask);
