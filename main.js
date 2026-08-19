@@ -6,10 +6,12 @@ const taskList = document.querySelector('.task-list');
 const expInput = document.querySelector('#exp-input');
 const expText = document.querySelector('.exp-text');
 const expFill = document.querySelector('.exp-fill');
-const level = document.querySelector('.level');
+const levelText = document.querySelector('.level-text');
 const dailyExpText = document.querySelector('.daily-exp-text');
 const achievementRate = document.querySelector('.achievement-rate');
 const streakText = document.querySelector('.streak-text');
+const levelUpText = document.querySelector('.level-up-text');
+const expBar = document.querySelector('.exp-bar');
 
 const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 const dailyExpLimit = 100;
@@ -27,10 +29,18 @@ let streak = Number(localStorage.getItem('streak')) || 0;
 const percentage = (currentExp / requiredExp) * 100;
 
 expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
-level.textContent = `Lv.${currentLevel}`;
+levelText.textContent = `Lv.${currentLevel}`;
 expFill.style.width = `${percentage}%`;
 dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
 streakText.textContent = `連続達成日数 ${streak}日`;
+
+levelUpText.addEventListener('animationend', () => {
+  levelUpText.classList.remove('level-up-animation');
+});
+
+expBar.addEventListener('animationend', () => {
+  expBar.classList.remove('exp-bar-level-up');
+});
 
 function getToday() {
   return new Date().toLocaleDateString('sv-SE');
@@ -177,9 +187,12 @@ function createTask(task) {
       if (currentExp >= requiredExp) {
         currentLevel++;
 
-        currentExp -= requiredExp;
+        levelText.textContent = `Lv.${currentLevel}`;
 
-        level.textContent = `Lv.${currentLevel}`;
+        levelUpText.classList.add('level-up-animation');
+        expBar.classList.add('exp-bar-level-up');
+
+        currentExp -= requiredExp;
 
         requiredExp = 100 + (currentLevel * currentLevel * 10);
 
