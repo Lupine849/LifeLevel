@@ -124,6 +124,7 @@ function createTask(task) {
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.checked = task.completed;
+  checkbox.classList.add('checkbox');
 
   const taskName = document.createElement('span');
   taskName.textContent = task.task;
@@ -211,10 +212,65 @@ function createTask(task) {
     expFill.style.width = `${percentage}%`;
   });
 
-  const button = document.createElement('button');
-  button.textContent = '✕';
+  const editButton = document.createElement('button');
+  editButton.textContent = '編集';
+  editButton.classList.add('edit-button');
 
-  button.addEventListener('click', () => {
+  let isEditing = false;
+  let editExp;
+  let editExpInput;
+
+  editButton.addEventListener('click', () => {
+    if (!isEditing) {
+      editButton.textContent = '保存';
+
+      editExp = document.createElement('div');
+      editExpInput = document.createElement('input');
+      const expUnit = document.createElement('span');
+
+      editExp.classList.add('edit-exp');
+      editExpInput.classList.add('edit-exp-input');
+
+      editExpInput.type = 'number';
+      editExpInput.min = '1';
+      editExpInput.max = '100';
+      editExpInput.value = task.exp;
+      expUnit.textContent = 'EXP';
+
+      editExp.appendChild(editExpInput);
+      editExp.appendChild(expUnit);
+
+      exp.replaceWith(editExp);
+
+      editExpInput.focus();
+
+      isEditing = true;
+    } else {
+      if (!editExpInput.reportValidity()) {
+        return;
+      }
+
+      const newExp = Number(editExpInput.value);
+
+      task.exp = newExp;
+
+      exp.textContent = `${task.exp}EXP`;
+
+      editExp.replaceWith(exp);
+
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+
+      editButton.textContent = '編集';
+
+      isEditing = false;
+    }
+  });
+
+  const deleteButton = document.createElement('button');
+  deleteButton.textContent = '✕';
+  deleteButton.classList.add('delete-button');
+
+  deleteButton.addEventListener('click', () => {
     const index = tasks.indexOf(task);
 
     tasks.splice(index, 1);
@@ -228,7 +284,8 @@ function createTask(task) {
   li.appendChild(taskName);
   li.appendChild(exp);
   li.appendChild(achievementCount);
-  li.appendChild(button);
+  li.appendChild(editButton);
+  li.appendChild(deleteButton);
 
   taskList.appendChild(li);
 }

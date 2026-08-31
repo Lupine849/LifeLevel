@@ -142,7 +142,7 @@ form button:hover {
   align-items: center;
 }
 
-.task-list li input {
+.checkbox {
   width: 16px;
   height: 16px;
   margin-right: 6px;
@@ -163,7 +163,44 @@ form button:hover {
   margin-left: auto;
 }
 
-.task-list li button {
+.edit-button {
+  margin-left: auto;
+  font-size: 1rem;
+  border: none;
+  background-color: transparent;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.edit-button:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.edit-exp {
+  margin-left: auto;
+}
+
+.edit-exp-input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: white;
+  font: inherit;
+  padding: 0;
+  border-bottom: 1px solid white;
+  width: 40px;
+  text-align: center;
+}
+
+.edit-exp-input::-webkit-outer-spin-button,
+.edit-exp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.delete-button {
   margin-left: auto;
   width: 32px;
   height: 32px;
