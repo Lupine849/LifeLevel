@@ -128,6 +128,7 @@ function createTask(task) {
 
   const taskName = document.createElement('span');
   taskName.textContent = task.task;
+  taskName.classList.add('task-name');
 
   if (task.completed) {
     taskName.classList.add('completed');
@@ -135,11 +136,9 @@ function createTask(task) {
 
   const exp = document.createElement('span');
   exp.textContent = `${task.exp}EXP`;
-  exp.classList.add('task-exp');
 
   const achievementCount = document.createElement('span');
   achievementCount.textContent = `${task.achievementCount}回`;
-  achievementCount.classList.add('task-achievementCount');
 
   checkbox.addEventListener('change', () => {
     const today = getToday();
@@ -228,7 +227,6 @@ function createTask(task) {
       editExpInput = document.createElement('input');
       const expUnit = document.createElement('span');
 
-      editExp.classList.add('edit-exp');
       editExpInput.classList.add('edit-exp-input');
 
       editExpInput.type = 'number';
