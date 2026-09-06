@@ -219,6 +219,26 @@ function createTask(task) {
   let editExp;
   let editExpInput;
 
+  function saveExp() {
+    if (!editExpInput.reportValidity()) {
+      return;
+    }
+
+    const newExp = Number(editExpInput.value);
+
+    task.exp = newExp;
+
+    exp.textContent = `${task.exp}EXP`;
+
+    editExp.replaceWith(exp);
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    editButton.textContent = '編集';
+
+    isEditing = false;
+  }
+
   editButton.addEventListener('click', () => {
     if (!isEditing) {
       editButton.textContent = '保存';
@@ -242,25 +262,15 @@ function createTask(task) {
 
       editExpInput.focus();
 
+      editExpInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          saveExp();
+        }
+      });
+
       isEditing = true;
     } else {
-      if (!editExpInput.reportValidity()) {
-        return;
-      }
-
-      const newExp = Number(editExpInput.value);
-
-      task.exp = newExp;
-
-      exp.textContent = `${task.exp}EXP`;
-
-      editExp.replaceWith(exp);
-
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-
-      editButton.textContent = '編集';
-
-      isEditing = false;
+      saveExp();
     }
   });
 
