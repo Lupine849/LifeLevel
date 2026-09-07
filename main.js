@@ -124,6 +124,7 @@ function createTask(task) {
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.checked = task.completed;
+  checkbox.disabled = task.lastClaimDate === today;
   checkbox.classList.add('checkbox');
 
   const taskName = document.createElement('span');
@@ -179,6 +180,7 @@ function createTask(task) {
       }
 
       task.lastClaimDate = today;
+      checkbox.disabled = true;
 
       expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
       dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
