@@ -9,45 +9,47 @@
 </head>
 
 <body>
-  <header>
-    <h1>LifeLevel</h1>
-    <div class="level">
-      <p class="level-text">Lv.1</p>
-      <span class="level-up-text">Level up!</span>
-    </div>
-  </header>
-
-  <main>
-    <form id="task-form">
-      <input id="task-input" type="text" placeholder="タスクを入力" required>
-      <input id="exp-input" type="number" min="1" max="100" placeholder="EXP" required>
-      <button type="submit">追加</button>
-    </form>
-
-    <ul class="task-list"></ul>
-
-    <section class="exp-status">
-      <p class="exp-text">EXP 0 / 100</p>
-
-      <div class="exp-bar">
-        <div class="exp-fill"></div>
+  <div class="container">
+    <header>
+      <h1>LifeLevel</h1>
+      <div class="level">
+        <p class="level-text">Lv.1</p>
+        <span class="level-up-text">Level up!</span>
       </div>
-    </section>
+    </header>
 
-    <section class="habit-status">
-      <div class="status-card">
-        <p class="daily-exp-text">Daily EXP 0 / 100</p>
-      </div>
+    <main>
+      <form id="task-form">
+        <input id="task-input" type="text" placeholder="タスクを入力" required>
+        <input id="exp-input" type="number" min="1" max="100" placeholder="EXP" required>
+        <button type="submit">追加</button>
+      </form>
 
-      <div class="status-card">
-        <p class="achievement-rate">累計達成率 0%</p>
-      </div>
+      <ul class="task-list"></ul>
 
-      <div class="status-card">
-        <p class="streak-text">連続達成日数 0日</p>
-      </div>
-    </section>
-  </main>
+      <section class="exp-status">
+        <p class="exp-text">EXP 0 / 100</p>
+
+        <div class="exp-bar">
+          <div class="exp-fill"></div>
+        </div>
+      </section>
+
+      <section class="habit-status">
+        <div class="status-card">
+          <p class="daily-exp-text">Daily EXP 0 / 100</p>
+        </div>
+
+        <div class="status-card">
+          <p class="achievement-rate">累計達成率 0%</p>
+        </div>
+
+        <div class="status-card">
+          <p class="streak-text">連続達成日数 0日</p>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="main.js"></script>
 </body>
