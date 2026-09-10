@@ -254,6 +254,7 @@ function createTask(task) {
       editExpInput.type = 'number';
       editExpInput.min = '1';
       editExpInput.max = '100';
+      editExpInput.required = true;
       editExpInput.value = task.exp;
       expUnit.textContent = 'EXP';
 
