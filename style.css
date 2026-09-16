@@ -94,6 +94,7 @@ form {
   border: none;
   border-radius: 10px;
   font-size: 1rem;
+  min-width: 0px;
 }
 
 #exp-input::-webkit-outer-spin-button,
