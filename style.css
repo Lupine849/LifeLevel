@@ -1,5 +1,15 @@
 @charset "utf-8";
 
+/* カスタムプロパティ */
+
+:root {
+  --color-background: #121212;
+  --color-text: #ffffff;
+  --color-accent: #4ade80;
+  --color-surface: #1e1e1e;
+  --color-danger: #ef4444;
+}
+
 /* リセット */
 
 * {
@@ -12,8 +22,8 @@
 
 body {
   font-family: sans-serif;
-  background-color: #121212;
-  color: #ffffff;
+  background-color: var(--color-background);
+  color: var(--color-text);
   min-height: 100vh;
 }
 
@@ -44,7 +54,7 @@ h1 {
 
 .level-text {
   font-size: 2rem;
-  color: #4ade80;
+  color: var(--color-accent);
   font-weight: bold;
 }
 
@@ -106,13 +116,7 @@ form {
   border: none;
   border-radius: 10px;
   font-size: 1rem;
-  min-width: 0px;
-}
-
-#exp-input::-webkit-outer-spin-button,
-#exp-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+  min-width: 0;
 }
 
 #exp-input {
@@ -123,11 +127,17 @@ form {
   text-align: center;
 }
 
+#exp-input::-webkit-outer-spin-button,
+#exp-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 form button {
   padding: 12px 20px;
   border: none;
   border-radius: 10px;
-  background-color: #4ade80;
+  background-color: var(--color-accent);
   color: #121212;
   font-weight: bold;
   cursor: pointer;
@@ -145,7 +155,7 @@ form button:hover {
 }
 
 .task-list li {
-  background-color: #1e1e1e;
+  background-color: var(--color-surface);
   padding: 15px;
   margin-bottom: 10px;
   border-radius: 10px;
@@ -179,7 +189,7 @@ form button:hover {
   font-size: 1rem;
   border: none;
   background-color: transparent;
-  color: white;
+  color: var(--color-text);
   cursor: pointer;
   font-weight: bold;
 }
@@ -193,10 +203,10 @@ form button:hover {
   border: none;
   outline: none;
   background-color: transparent;
-  color: white;
+  color: var(--color-text);
   font: inherit;
   padding: 0;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid var(--color-text);
   width: 40px;
   text-align: center;
 }
@@ -212,8 +222,8 @@ form button:hover {
   height: 32px;
   border: none;
   border-radius: 50%;
-  background-color: #ef4444;
-  color: white;
+  background-color: var(--color-danger);
+  color: var(--color-text);
   cursor: pointer;
   font-weight: bold;
 }
@@ -221,7 +231,7 @@ form button:hover {
 /* EXPステータス */
 
 .exp-status {
-  background-color: #1e1e1e;
+  background-color: var(--color-surface);
   padding: 20px;
   border-radius: 15px;
 }
@@ -245,22 +255,22 @@ form button:hover {
 
 @keyframes expBarGlow {
   0% {
-    box-shadow: 0 0 0 rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 rgb(from var(--color-accent) r g b / 0);
   }
 
   50% {
-    box-shadow: 0 0 36px rgba(74, 222, 128, 0.9);
+    box-shadow: 0 0 36px rgb(from var(--color-accent) r g b / 0.9);
   }
 
   100% {
-    box-shadow: 0 0 0 rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 rgb(from var(--color-accent) r g b / 0);
   }
 }
 
 .exp-fill {
   width: 0%;
   height: 100%;
-  background-color: #4ade80;
+  background-color: var(--color-accent);
   transition: width 0.3s;
 }
 
@@ -271,7 +281,7 @@ form button:hover {
 }
 
 .status-card {
-  background-color: #1e1e1e;
+  background-color: var(--color-surface);
   padding: 20px;
   border-radius: 15px;
 }
