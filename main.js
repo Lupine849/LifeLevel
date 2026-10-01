@@ -1,5 +1,7 @@
 'use strict';
 
+// DOM要素
+
 const taskForm = document.querySelector('#task-form');
 const taskInput = document.querySelector('#task-input');
 const taskList = document.querySelector('.task-list');
@@ -13,34 +15,25 @@ const streakText = document.querySelector('.streak-text');
 const levelUpText = document.querySelector('.level-up-text');
 const expBar = document.querySelector('.exp-bar');
 
-const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+// 設定値
+
 const dailyExpLimit = 100;
 const dailyBonusExp = 20;
 
+// アプリ状態
+
+const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
 let currentExp = Number(localStorage.getItem('currentExp')) || 0;
 let currentLevel = Number(localStorage.getItem('currentLevel')) || 1;
-let requiredExp = 100 + (currentLevel * currentLevel * 10);
+let requiredExp = calculateRequiredExp(currentLevel);
 let dailyExp = Number(localStorage.getItem('dailyExp')) || 0;
 let dailyExpDate = localStorage.getItem('dailyExpDate');
 let totalExp = Number(localStorage.getItem('totalExp')) || 0;
 let trackingStartDate = localStorage.getItem('trackingStartDate');
 let streak = Number(localStorage.getItem('streak')) || 0;
 
-const percentage = (currentExp / requiredExp) * 100;
-
-expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
-levelText.textContent = `Lv.${currentLevel}`;
-expFill.style.width = `${percentage}%`;
-dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
-streakText.textContent = `連続達成日数 ${streak}日`;
-
-levelUpText.addEventListener('animationend', () => {
-  levelUpText.classList.remove('level-up-animation');
-});
-
-expBar.addEventListener('animationend', () => {
-  expBar.classList.remove('exp-bar-level-up');
-});
+// 日付関連
 
 function getToday() {
   return new Date().toLocaleDateString('sv-SE');
@@ -54,6 +47,34 @@ function getYesterday() {
   return yesterday.toLocaleDateString('sv-SE');
 }
 
+// EXP・レベル関連
+
+function updateLevelDisplay() {
+  levelText.textContent = `Lv.${currentLevel}`;
+}
+
+function updateExpDisplay() {
+  expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
+
+  const percentage = (currentExp / requiredExp) * 100;
+
+  expFill.style.width = `${percentage}%`;
+}
+
+function calculateRequiredExp(level) {
+  return 100 + (level * level * 10);
+}
+
+// 習慣記録関連
+
+function updateDailyExpDisplay() {
+  dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
+}
+
+function updateStreakDisplay() {
+  streakText.textContent = `連続達成日数 ${streak}日`;
+}
+
 function updateStreak() {
   if (dailyExp === dailyExpLimit && getYesterday() === dailyExpDate) {
     streak++;
@@ -62,11 +83,9 @@ function updateStreak() {
   }
 
   localStorage.setItem('streak', streak);
-
-  streakText.textContent = `連続達成日数 ${streak}日`;
 }
 
-function resetDailyExp(today) {
+function updateDailyState(today) {
   if (dailyExpDate !== today) {
     updateStreak();
 
@@ -76,20 +95,10 @@ function resetDailyExp(today) {
     localStorage.setItem('dailyExp', dailyExp);
     localStorage.setItem('dailyExpDate', dailyExpDate);
 
-    dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
-
     return true;
   }
 
   return false;
-}
-
-resetDailyExp(getToday());
-
-if (!trackingStartDate) {
-  trackingStartDate = getToday();
-
-  localStorage.setItem('trackingStartDate', trackingStartDate);
 }
 
 function calculateRecordDays(startDate, endDate) {
@@ -105,12 +114,12 @@ function updateAchievementRate() {
   const recordDays = calculateRecordDays(trackingStartDate, getToday()) - 1;
   const completedTotalExp = totalExp - dailyExp;
   const totalTargetExp = recordDays * dailyExpLimit;
-  const habitAchievementRate = totalTargetExp === 0 ? 0 : Math.floor((completedTotalExp / totalTargetExp) * 100);
+  const cumulativeAchievementRate = totalTargetExp === 0 ? 0 : Math.floor((completedTotalExp / totalTargetExp) * 100);
 
-  achievementRate.textContent = `累計達成率 ${habitAchievementRate}%`;
+  achievementRate.textContent = `累計達成率 ${cumulativeAchievementRate}%`;
 }
 
-updateAchievementRate();
+// タスク関連
 
 function createTask(task) {
   const today = getToday();
@@ -144,9 +153,9 @@ function createTask(task) {
   checkbox.addEventListener('change', () => {
     const today = getToday();
 
-    const wasDailyExpReset = resetDailyExp(today);
+    const wasDailyStateUpdate = updateDailyState(today);
 
-    if (wasDailyExpReset) {
+    if (wasDailyStateUpdate) {
       updateAchievementRate();
     }
 
@@ -182,23 +191,19 @@ function createTask(task) {
       task.lastClaimDate = today;
       checkbox.disabled = true;
 
-      expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
-      dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
       achievementCount.textContent = `${task.achievementCount}回`;
 
       if (currentExp >= requiredExp) {
         currentLevel++;
 
-        levelText.textContent = `Lv.${currentLevel}`;
+        updateLevelDisplay();
 
         levelUpText.classList.add('level-up-animation');
         expBar.classList.add('exp-bar-level-up');
 
         currentExp -= requiredExp;
 
-        requiredExp = 100 + (currentLevel * currentLevel * 10);
-
-        expText.textContent = `EXP ${currentExp} / ${requiredExp}`;
+        requiredExp = calculateRequiredExp(currentLevel);
       }
     }
 
@@ -208,9 +213,8 @@ function createTask(task) {
     localStorage.setItem('dailyExp', dailyExp);
     localStorage.setItem('totalExp', totalExp);
 
-    const percentage = (currentExp / requiredExp) * 100;
-
-    expFill.style.width = `${percentage}%`;
+    updateDailyExpDisplay();
+    updateExpDisplay();
   });
 
   const editButton = document.createElement('button');
@@ -301,11 +305,28 @@ function createTask(task) {
   taskList.appendChild(li);
 }
 
+// 初期化
+
+if (!trackingStartDate) {
+  trackingStartDate = getToday();
+
+  localStorage.setItem('trackingStartDate', trackingStartDate);
+}
+
+updateDailyState(getToday());
+updateLevelDisplay();
+updateExpDisplay();
+updateDailyExpDisplay();
+updateStreakDisplay();
+updateAchievementRate();
+
 tasks.forEach((task) => {
   createTask(task);
 });
 
 localStorage.setItem('tasks', JSON.stringify(tasks));
+
+// イベント
 
 taskForm.addEventListener('submit', (e) => {
   e.preventDefault();
@@ -334,4 +355,12 @@ taskForm.addEventListener('submit', (e) => {
   taskInput.value = '';
   expInput.value = '';
   taskInput.focus();
+});
+
+levelUpText.addEventListener('animationend', () => {
+  levelUpText.classList.remove('level-up-animation');
+});
+
+expBar.addEventListener('animationend', () => {
+  expBar.classList.remove('exp-bar-level-up');
 });
