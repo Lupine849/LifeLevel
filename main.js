@@ -61,6 +61,36 @@ function updateExpDisplay() {
   expFill.style.width = `${percentage}%`;
 }
 
+function levelUp() {
+  currentLevel++;
+  currentExp -= requiredExp;
+  requiredExp = calculateRequiredExp(currentLevel);
+
+  updateLevelDisplay();
+
+  levelUpText.classList.add('level-up-animation');
+  expBar.classList.add('exp-bar-level-up');
+}
+
+function completeTask(task, today) {
+  currentExp += task.exp;
+  dailyExp += task.exp;
+  totalExp += task.exp;
+  task.achievementCount++;
+
+  if (dailyExp === dailyExpLimit) {
+    currentExp += dailyBonusExp;
+
+    alert(`${dailyExpLimit}EXP達成！ボーナス${dailyBonusExp}EXPを獲得しました。`);
+  }
+
+  task.lastClaimDate = today;
+
+  if (currentExp >= requiredExp) {
+    levelUp();
+  }
+}
+
 function calculateRequiredExp(level) {
   return 100 + (level * level * 10);
 }
@@ -156,6 +186,7 @@ function createTask(task) {
     const wasDailyStateUpdate = updateDailyState(today);
 
     if (wasDailyStateUpdate) {
+      updateStreakDisplay();
       updateAchievementRate();
     }
 
@@ -177,34 +208,11 @@ function createTask(task) {
       checkbox.checked &&
       task.lastClaimDate !== today
     ) {
-      currentExp += task.exp;
-      dailyExp += task.exp;
-      totalExp += task.exp;
-      task.achievementCount++;
+      completeTask(task, today);
 
-      if (dailyExp === dailyExpLimit) {
-        currentExp += dailyBonusExp;
-
-        alert(`${dailyExpLimit}EXP達成！ボーナス${dailyBonusExp}EXPを獲得しました。`);
-      }
-
-      task.lastClaimDate = today;
       checkbox.disabled = true;
 
       achievementCount.textContent = `${task.achievementCount}回`;
-
-      if (currentExp >= requiredExp) {
-        currentLevel++;
-
-        updateLevelDisplay();
-
-        levelUpText.classList.add('level-up-animation');
-        expBar.classList.add('exp-bar-level-up');
-
-        currentExp -= requiredExp;
-
-        requiredExp = calculateRequiredExp(currentLevel);
-      }
     }
 
     localStorage.setItem('tasks', JSON.stringify(tasks));
