@@ -98,11 +98,11 @@ function calculateRequiredExp(level) {
 // 習慣記録関連
 
 function updateDailyExpDisplay() {
-  dailyExpText.textContent = `Daily EXP ${dailyExp} / ${dailyExpLimit}`;
+  dailyExpText.textContent = `デイリーEXP ${dailyExp} / ${dailyExpLimit}`;
 }
 
 function updateStreakDisplay() {
-  streakText.textContent = `連続達成日数 ${streak}日`;
+  streakText.textContent = `デイリー上限連続達成 ${streak}日`;
 }
 
 function updateStreak() {
@@ -146,7 +146,7 @@ function updateAchievementRate() {
   const totalTargetExp = recordDays * dailyExpLimit;
   const cumulativeAchievementRate = totalTargetExp === 0 ? 0 : Math.floor((completedTotalExp / totalTargetExp) * 100);
 
-  achievementRate.textContent = `累計達成率 ${cumulativeAchievementRate}%`;
+  achievementRate.textContent = `累計EXP達成率 ${cumulativeAchievementRate}%`;
 }
 
 // タスク関連
