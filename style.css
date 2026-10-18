@@ -121,10 +121,13 @@ form {
 
 #exp-input {
   appearance: textfield;
+  width: 60px;
   padding: 6px;
   border: none;
   border-radius: 10px;
   text-align: center;
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
 #exp-input::-webkit-outer-spin-button,
