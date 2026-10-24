@@ -5,6 +5,14 @@
 LifeLevelは、日々のタスク達成をEXP（経験値）として記録し、
 レベルアップを楽しみながら継続的にタスクに取り組めるWebアプリです。
 
+## スクリーンショット
+
+![LifeLevelの画面](images/screenshot.png)
+
+## デモサイト
+
+[LifeLevelを開く](https://lupine849.github.io/LifeLevel/)
+
 ## 主な機能
 
 - タスクの追加・削除
